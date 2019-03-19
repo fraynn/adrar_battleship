@@ -2,11 +2,11 @@ package adrar.battleship;
 
 public class Player {
 	private String name;
-	private PlayerFleet shipList;
+	private PlayerFleet playerFleet;
 
 	public Player(String name) {
 		this.name = name;
-		shipList = new PlayerFleet();
+		playerFleet = new PlayerFleet();
 	}
 
 	public void placeShip(Ship ship) {
@@ -16,7 +16,7 @@ public class Player {
 
 	// Get + Set
 	public PlayerFleet getShipList() {
-		return shipList;
+		return playerFleet;
 	}
 
 	public String getName() {
