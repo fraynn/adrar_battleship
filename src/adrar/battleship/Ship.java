@@ -1,9 +1,16 @@
 package adrar.battleship;
 
+import java.util.List;
+
 public class Ship {
 	private ShipType shipType;
 	private int size;
-	private boolean sunk;
+	private List<Square> shipCoordinates;
+
+	public Ship(ShipType shipType) {
+		this.shipType = shipType;
+		size = shipType.getValue();
+	}
 
 	// Get + Set
 	public int getSize() {
@@ -14,12 +21,21 @@ public class Ship {
 		this.size = size;
 	}
 
-	public boolean isSunk() {
-		return sunk;
+	public List<Square> getShipCoordinates() {
+		return shipCoordinates;
 	}
 
-	public void setSunk(boolean sunk) {
-		this.sunk = sunk;
+	public void setShipCoordinates(List<Square> shipCoordinates) {
+		this.shipCoordinates = shipCoordinates;
+	}
+
+	public ShipType getShipType() {
+		return shipType;
+	}
+
+	@Override
+	public String toString() {
+		return "Ship [shipType=" + shipType + ", size=" + size + ", shipCoordinates=" + shipCoordinates + "]";
 	}
 
 }
