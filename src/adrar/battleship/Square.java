@@ -1,17 +1,11 @@
 package adrar.battleship;
 
 public class Square {
-	private Coordinates coordinates;
+	private int y;
+	private char x;
 	private SquareStatus status;
 
 	// Get + Set
-	public Coordinates getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(Coordinates coordinates) {
-		this.coordinates = coordinates;
-	}
 
 	public SquareStatus getStatus() {
 		return status;
@@ -19,6 +13,22 @@ public class Square {
 
 	public void setStatus(SquareStatus status) {
 		this.status = status;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public char getX() {
+		return x;
+	}
+
+	public void setX(char x) {
+		this.x = x;
 	}
 
 }

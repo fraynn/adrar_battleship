@@ -3,7 +3,9 @@ package adrar.battleship;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PlayerFleet {
+import adrar.battleship.interfaces.PlayerFleetInterface;
+
+public class PlayerFleet implements PlayerFleetInterface {
 	private List<Ship> shipList;
 
 	// Constructor
@@ -12,18 +14,39 @@ public class PlayerFleet {
 	}
 
 	// Methods
-	public void addShip(Ship ship) {
+
+	@Override
+	public Ship createShip(List<Square> coordinatesList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addShipToFleet(Ship ship) {
 		if (hasCorrectCoordinates(ship)) {
 			shipList.add(ship);
 		}
 	}
 
+	@Override
+	public boolean checkShipCoordinates(List<Square> coordinatesList) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Square> generateShipCoordinates(int shipSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// Check if necessary
 	private boolean hasCorrectCoordinates(Ship ship) {
 		return hasCorrectNumberOfCoordinates(ship) && hasConsecutiveCoordinates(ship);
 	}
 
 	private boolean hasCorrectNumberOfCoordinates(Ship ship) {
-		return ship.getShipCoordinates().size() == ship.getSize();
+		return ship.getShipCoordinates().size() == ship.getShipType().getValue();
 	}
 
 	private boolean hasConsecutiveCoordinates(Ship ship) {
@@ -31,12 +54,12 @@ public class PlayerFleet {
 		// TODO
 	}
 
-	private boolean areHorizontalConsecutive(Coordinates a, Coordinates b) {
-		return a.toString().charAt(0) == b.toString().charAt(0);
+	private boolean areHorizontalConsecutive(Square a, Square b) {
+		return a.getX() == b.getX();
 	}
 
-	private boolean areVerticalConsecutive(Coordinates a, Coordinates b) {
-		return a.toString().charAt(1) == b.toString().charAt(1);
+	private boolean areVerticalConsecutive(Square a, Square b) {
+		return a.getY() == b.getY();
 	}
 
 	// Get + Set
@@ -47,4 +70,5 @@ public class PlayerFleet {
 	public void setShipList(List<Ship> shipList) {
 		this.shipList = shipList;
 	}
+
 }

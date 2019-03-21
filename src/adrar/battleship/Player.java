@@ -1,6 +1,8 @@
 package adrar.battleship;
 
-public class Player {
+import adrar.battleship.interfaces.PlayerInterface;
+
+public class Player implements PlayerInterface {
 	private String name;
 	private PlayerFleet playerFleet;
 
@@ -9,9 +11,22 @@ public class Player {
 		playerFleet = new PlayerFleet();
 	}
 
-	public void placeShip(Ship ship) {
-		// TODO
-//		ship.setShipCoordinates();
+	@Override
+	public SquareStatus receiveAttack(Square square) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Square attack() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasShipsLeft() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	// Get + Set
@@ -26,4 +41,5 @@ public class Player {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 }
