@@ -17,8 +17,8 @@ public class PlayerFleet implements PlayerFleetInterface {
 
 	@Override
 	public Ship createShip(List<Square> coordinatesList) {
-		// TODO Auto-generated method stub
-		return null;
+		Ship ship = shipList.get(0);
+		return ship;
 	}
 
 	@Override
@@ -50,8 +50,10 @@ public class PlayerFleet implements PlayerFleetInterface {
 	}
 
 	private boolean hasConsecutiveCoordinates(Ship ship) {
-		return false;
-		// TODO
+		return areHorizontalConsecutive(ship.getShipCoordinates().get(0),
+				ship.getShipCoordinates().get(ship.getShipCoordinates().size()))
+				|| areVerticalConsecutive(ship.getShipCoordinates().get(0),
+						ship.getShipCoordinates().get(ship.getShipCoordinates().size()));
 	}
 
 	private boolean areHorizontalConsecutive(Square a, Square b) {
