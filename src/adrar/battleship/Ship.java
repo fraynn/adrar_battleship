@@ -15,7 +15,6 @@ public class Ship implements ShipInterface {
 	}
 
 	// Methods
-
 	@Override
 	public SquareStatus isHit(Square square) {
 		// TODO Auto-generated method stub
@@ -29,7 +28,6 @@ public class Ship implements ShipInterface {
 	}
 
 	// Get + Set
-
 	public List<Square> getShipCoordinates() {
 		return shipCoordinates;
 	}

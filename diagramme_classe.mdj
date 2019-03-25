@@ -1393,7 +1393,7 @@
 											"top": 488,
 											"width": 259.06689453125,
 											"height": 13,
-											"text": "+createShip(list square): ship",
+											"text": "+createShip(list square, shipType): ship",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2118,9 +2118,9 @@
 										"$ref": "AAAAAAFpn9hjCht+044="
 									},
 									"font": "Arial;13;0",
-									"left": 702,
+									"left": 701,
 									"top": 236,
-									"width": 19.5126953125,
+									"width": 20,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 25,
@@ -2660,9 +2660,9 @@
 										"$ref": "AAAAAAFpn9q99SF0sH0="
 									},
 									"font": "Arial;13;0",
-									"left": 285,
+									"left": 284,
 									"top": 164,
-									"width": 19.5126953125,
+									"width": 20,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 25,
@@ -2931,9 +2931,9 @@
 										"$ref": "AAAAAAFpn+oEgiqPko0="
 									},
 									"font": "Arial;13;0",
-									"left": 136,
+									"left": 135,
 									"top": 271,
-									"width": 19.5126953125,
+									"width": 20,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 25,
@@ -3349,7 +3349,8 @@
 									"_parent": {
 										"$ref": "AAAAAAFplYRIP0eT800="
 									},
-									"name": "square"
+									"name": "square",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -3557,8 +3558,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFpoHu+DVWx61c="
 									},
-									"name": "list square",
-									"type": ""
+									"name": "list square"
 								},
 								{
 									"_type": "UMLParameter",
@@ -3568,6 +3568,15 @@
 									},
 									"type": "ship",
 									"direction": "return"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAFptEBTcdEuL1s=",
+									"_parent": {
+										"$ref": "AAAAAAFpoHu+DVWx61c="
+									},
+									"name": "shipType",
+									"type": ""
 								}
 							]
 						},
@@ -3702,7 +3711,8 @@
 									"_parent": {
 										"$ref": "AAAAAAFpn+aIOyZYxN4="
 									},
-									"name": "square"
+									"name": "square",
+									"type": ""
 								}
 							]
 						},

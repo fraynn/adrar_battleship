@@ -1,12 +1,34 @@
 package adrar.battleship;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Square {
 	private int y;
-	private char x;
+	private int x;
 	private SquareStatus status;
+	public static final int MIN_SQUARE_VALUE = 0;
+	public static final int MAX_SQUARE_VALUE = 10;
+
+	// Constructor
+	public Square(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	// Methods
+	public static int getSquareSlotsNumber() {
+		return (MAX_SQUARE_VALUE) * (MAX_SQUARE_VALUE);
+	}
+
+	public List<Integer> getSquareCoordinates() {
+		List<Integer> coordinatesList = new ArrayList<>();
+		coordinatesList.add(x);
+		coordinatesList.add(y);
+		return coordinatesList;
+	}
 
 	// Get + Set
-
 	public SquareStatus getStatus() {
 		return status;
 	}
@@ -23,12 +45,19 @@ public class Square {
 		this.y = y;
 	}
 
-	public char getX() {
+	public int getX() {
 		return x;
 	}
 
-	public void setX(char x) {
+	public void setX(int x) {
 		this.x = x;
 	}
 
+	public static int getMinSquareValue() {
+		return MIN_SQUARE_VALUE;
+	}
+
+	public static int getMaxSquareValue() {
+		return MAX_SQUARE_VALUE;
+	}
 }

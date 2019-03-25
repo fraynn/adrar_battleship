@@ -1,5 +1,6 @@
 package adrar.battleship;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,25 +8,91 @@ import adrar.battleship.interfaces.PlayerFleetInterface;
 
 public class PlayerFleet implements PlayerFleetInterface {
 	private List<Ship> shipList;
+	private List<Integer> availableSquareSlotsList;
 
 	// Constructor
 	public PlayerFleet() {
 		shipList = new LinkedList<>();
+		availableSquareSlotsList = new LinkedList<>();
+		fillAvailableSquareSlotsList();
+		for (ShipType listOfShipTypes : ShipType.values()) {
+			addShipToFleet(createShip(generateShipCoordinates(listOfShipTypes.getValue()), listOfShipTypes));
+//			System.out.println(listOfShipTypes);
+//			System.out.println(listOfShipTypes.getValue());
+		}
 	}
 
+	/*-creer un bateau depuis l'enum
+	-determiner la premiere coordonnée aleatoirement
+	-verifier qu'il n'y a rien sur cette case et près de cette case
+	-déterminer la 2e coordonnée aleatoirement
+	-verifier qu'il n'y a rien sur cette case et près de cette case
+	-déterminer chaque case du bateau en fonction des 2 cases début et fin
+	-verifier qu'il n'y a rien près de toutes les cases du bateau
+	-passer au bateau suivant dans l'enum
+	*/
+
 	// Methods
+	// Fill the available slots list with slots identifiers
+	public void fillAvailableSquareSlotsList() {
+		for (int i = 0; i < Square.getSquareSlotsNumber(); i++) {
+			availableSquareSlotsList.add(i);
+			System.out.println(i);
+		}
+	}
+
+	// Set a beginning slot for the ship
+	public void setShipFirstSlot() {
+		makeUnavailableAllSquareSlotsAroundSquare(getRandomAvailableSquareSlot());
+	}
+
+	// Get a random slot into the list of the unused and available slots
+	public int getRandomAvailableSquareSlot() {
+		int index = (int) (Math.random() * availableSquareSlotsList.size());
+		System.out.println(index);
+		return availableSquareSlotsList.get(index);
+	}
+
+	// Convert and get square from slot
+	public Square getSquareFromSquareSlot(int slotIdentifier) {
+		int y = slotIdentifier % Square.getMaxSquareValue();
+		int x = Square.getMaxSquareValue() - y;
+		Square square = new Square(x, y);
+		return square;
+	}
+
+	// Make unavailable all the square slots around a square given
+	public void makeUnavailableAllSquareSlotsAroundSquare(int slotIdentifier) {
+		int maxSlotIdToRemove = slotIdentifier + Square.MAX_SQUARE_VALUE + 1;
+		int minSlotIdToRemove = slotIdentifier - Square.MAX_SQUARE_VALUE - 1;
+//		System.out.println(maxSlotIdToRemove);
+//		System.out.println(minSlotIdToRemove);
+		for (Iterator<Integer> iterator = availableSquareSlotsList.iterator(); iterator.hasNext();) {
+			Integer integer = iterator.next();
+			if (integer <= maxSlotIdToRemove && integer >= minSlotIdToRemove) {
+				iterator.remove();
+			}
+		}
+	}
+
+	// Get available empty coordinates
+	public List<Integer> getAvailableCoordinates() {
+		for (int i = 0; i < availableSquareSlotsList.size(); i++) {
+			System.out.println(i);
+		}
+		return availableSquareSlotsList;
+	}
 
 	@Override
-	public Ship createShip(List<Square> coordinatesList) {
-		Ship ship = shipList.get(0);
+	public Ship createShip(List<Square> coordinatesList, ShipType type) {
+		Ship ship = new Ship(type);
 		return ship;
 	}
 
 	@Override
 	public void addShipToFleet(Ship ship) {
-		if (hasCorrectCoordinates(ship)) {
-			shipList.add(ship);
-		}
+		// TODO
+		shipList.add(ship);
 	}
 
 	@Override
@@ -39,6 +106,8 @@ public class PlayerFleet implements PlayerFleetInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	//
 
 	// Check if necessary
 	private boolean hasCorrectCoordinates(Ship ship) {
