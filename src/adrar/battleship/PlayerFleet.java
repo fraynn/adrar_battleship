@@ -15,8 +15,9 @@ public class PlayerFleet implements PlayerFleetInterface {
 		shipList = new LinkedList<>();
 		availableSquareSlotsList = new LinkedList<>();
 		fillAvailableSquareSlotsList();
-		for (ShipType listOfShipTypes : ShipType.values()) {
-			addShipToFleet(createShip(generateShipCoordinates(listOfShipTypes.getValue()), listOfShipTypes));
+		for (ShipType actualShipType : ShipType.values()) {
+			Ship newShip = createShip(generateShipCoordinates(actualShipType.getValue()), actualShipType);
+			addShipToFleet(newShip);
 //			System.out.println(listOfShipTypes);
 //			System.out.println(listOfShipTypes.getValue());
 		}
@@ -43,7 +44,18 @@ public class PlayerFleet implements PlayerFleetInterface {
 
 	// Set a beginning slot for the ship
 	public void setShipFirstSlot() {
-		makeUnavailableAllSquareSlotsAroundSquare(getRandomAvailableSquareSlot());
+		int randomSlot = getRandomAvailableSquareSlot();
+		makeUnavailableAllSquareSlotsAroundSquare(randomSlot);
+	}
+
+	// Set the ending slot for the ship
+	public void setShipLastSlot() {
+
+	}
+
+	// Set the inner slots for the ship
+	public void setShipInnerSlots() {
+
 	}
 
 	// Get a random slot into the list of the unused and available slots
@@ -85,6 +97,7 @@ public class PlayerFleet implements PlayerFleetInterface {
 
 	@Override
 	public Ship createShip(List<Square> coordinatesList, ShipType type) {
+		// TODO
 		Ship ship = new Ship(type);
 		return ship;
 	}
@@ -103,6 +116,7 @@ public class PlayerFleet implements PlayerFleetInterface {
 
 	@Override
 	public List<Square> generateShipCoordinates(int shipSize) {
+		setShipFirstSlot();
 		// TODO Auto-generated method stub
 		return null;
 	}
