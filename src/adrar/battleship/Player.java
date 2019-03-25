@@ -5,10 +5,12 @@ import adrar.battleship.interfaces.PlayerInterface;
 public class Player implements PlayerInterface {
 	private String name;
 	private PlayerFleet playerFleet;
+	private SquareStatus lastShotResult;
 
 	public Player(String name) {
 		this.name = name;
 		playerFleet = new PlayerFleet();
+		lastShotResult = null;
 	}
 
 	@Override
@@ -37,13 +39,11 @@ public class Player implements PlayerInterface {
 
 	@Override
 	public SquareStatus provideShotResponse() {
-		// TODO Auto-generated method stub
-		return null;
+		return lastShotResult;
 	}
 
 	@Override
 	public void startNewGame() {
-		// TODO Auto-generated method stub
 
 	}
 

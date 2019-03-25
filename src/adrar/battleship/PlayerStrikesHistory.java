@@ -1,11 +1,16 @@
 package adrar.battleship;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import adrar.battleship.interfaces.PlayerStrikesHistoryInterface;
 
 public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
 	private List<Square> strikesHistory;
+
+	public PlayerStrikesHistory() {
+		strikesHistory = new ArrayList<>();
+	}
 
 	@Override
 	public void addStrike(Square square) {
