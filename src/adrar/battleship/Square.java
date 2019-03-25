@@ -1,12 +1,29 @@
 package adrar.battleship;
 
 public class Square {
-	private int y;
-	private char x;
+	private char y;
+	private int x;
 	private SquareStatus status;
 
-	// Get + Set
+	// Constructor
+	public Square(char y, int x) {
+		this.y = y;
+		this.x = x;
+		status = null;
+	}
 
+	// Methods
+	@Override
+	public boolean equals(Object obj) {
+		return y == ((Square) obj).getY() && x == ((Square) obj).getX();
+	}
+
+	@Override
+	public String toString() {
+		return "Square [y=" + y + ", x=" + x + ", status=" + status + "]";
+	}
+
+	// Get + Set
 	public SquareStatus getStatus() {
 		return status;
 	}
@@ -15,20 +32,12 @@ public class Square {
 		this.status = status;
 	}
 
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public char getX() {
+	public int getX() {
 		return x;
 	}
 
-	public void setX(char x) {
-		this.x = x;
+	public char getY() {
+		return y;
 	}
 
 }
