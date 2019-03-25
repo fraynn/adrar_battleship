@@ -17,35 +17,40 @@ public class Ship implements ShipInterface {
 	// Methods
 
 	@Override
-	public SquareStatus isHit(Square square) {
+	public SquareStatus updateHitSquareStatus(Square square) {
 		if (shipCoordinates.contains(square)) {
-			int squareIndex = shipCoordinates.indexOf(square);
-			shipCoordinates.get(squareIndex).setStatus(SquareStatus.Hit);
+			updateHitSquare(square);
 			return tellStatus(SquareStatus.Hit);
 		} else {
 			return tellStatus(SquareStatus.Miss);
 		}
 	}
-	// TODO : rename isHit + change return type updateShipStatus
-	// TODO : override equals method + test it
 
-	@Override
-	public boolean updateShipStatus() {
+	private void updateShipSunk() {
 		boolean sunk = true;
 		for (Square square : shipCoordinates) {
-			if (square.getStatus().equals(SquareStatus.Miss) || square.getStatus() == null) {
+			if (SquareStatus.Miss.equals(square.getStatus()) || square.getStatus() == null) {
 				sunk = false;
 			}
 		}
-		return sunk;
+		setSunk(sunk);
 	}
 
 	private SquareStatus tellStatus(SquareStatus status) {
+		if (!sunk) {
+			updateShipSunk();
+		}
+
 		if (sunk) {
 			return SquareStatus.Sunk;
 		} else {
 			return status;
 		}
+	}
+
+	private void updateHitSquare(Square square) {
+		int squareIndex = shipCoordinates.indexOf(square);
+		shipCoordinates.get(squareIndex).setStatus(SquareStatus.Hit);
 	}
 
 	// Get + Set
