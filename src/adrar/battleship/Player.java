@@ -18,15 +18,33 @@ public class Player implements PlayerInterface {
 	}
 
 	@Override
-	public Square attack() {
+	public Square targetSquare() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean hasShipsLeft() {
+		boolean hasShipsLeft = false;
+		for (Ship ship : playerFleet.getShipList()) {
+			if (!ship.isSunk()) {
+				hasShipsLeft = true;
+				return hasShipsLeft;
+			}
+		}
+		return hasShipsLeft;
+	}
+
+	@Override
+	public SquareStatus provideShotResponse() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
+	}
+
+	@Override
+	public void startNewGame() {
+		// TODO Auto-generated method stub
+
 	}
 
 	// Get + Set

@@ -6,7 +6,11 @@ import adrar.battleship.SquareStatus;
 public interface PlayerInterface {
 	public SquareStatus receiveAttack(Square square);
 
-	public Square attack();
+	public Square targetSquare();
 
 	public boolean hasShipsLeft();
+
+	public SquareStatus provideShotResponse();
+
+	public void startNewGame();
 }
