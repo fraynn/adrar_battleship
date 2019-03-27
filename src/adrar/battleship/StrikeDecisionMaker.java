@@ -30,6 +30,14 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		}
 	}
 
+	// TODO :
+//	- clear hit list if sunk
+//	- strike strategy if 1 square hit
+//	- strike strategy when ship direction is known
+//	- general strategy otherwise
+//	- update currentStrikeAttempt
+//	- remove strikes all around the hit ship from availableTargets
+
 	private Square targetRandomSquare() {
 		return null;
 	}
