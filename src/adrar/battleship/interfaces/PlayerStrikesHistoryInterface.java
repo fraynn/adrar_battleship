@@ -1,9 +1,9 @@
 package adrar.battleship.interfaces;
 
-import adrar.battleship.Square;
+import adrar.battleship.Coordinate;
 
 public interface PlayerStrikesHistoryInterface {
-	public void addStrike(Square square);
+	public void addStrikeToHistory(Coordinate coordinate);
 
-	public boolean checkIfStrikeExists(Square square);
+	public boolean checkIfStrikeExists(Coordinate coordinate);
 }

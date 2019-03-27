@@ -6,26 +6,36 @@ import java.util.List;
 import adrar.battleship.interfaces.PlayerStrikesHistoryInterface;
 
 public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
-	private List<Square> strikesHistory;
+	private List<Coordinate> strikesHistory;
+	private List<Square> hitStrikes;
 
 	public PlayerStrikesHistory() {
 		strikesHistory = new ArrayList<>();
+		hitStrikes = new ArrayList<>();
+	}
+
+	public void addStrikeToHitList(Square square) {
+		hitStrikes.add(square);
+	}
+
+	public void clearHitList() {
+		hitStrikes.clear();
 	}
 
 	@Override
-	public void addStrike(Square square) {
-		if (checkIfStrikeExists(square) == false) {
-			strikesHistory.add(square);
+	public void addStrikeToHistory(Coordinate coordinate) {
+		if (checkIfStrikeExists(coordinate) == false) {
+			strikesHistory.add(coordinate);
 		} else {
 			System.out.println("you already targeted that square");
 		}
 	}
 
 	@Override
-	public boolean checkIfStrikeExists(Square square) {
+	public boolean checkIfStrikeExists(Coordinate coordinate) {
 		boolean exist = false;
-		for (Square currentSquare : strikesHistory) {
-			if (currentSquare.equals(square)) {
+		for (Coordinate currentCoordinate : strikesHistory) {
+			if (currentCoordinate.equals(coordinate)) {
 				exist = true;
 				return exist;
 			}
@@ -34,12 +44,20 @@ public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
 	}
 
 	// Get + Set
-	public List<Square> getStrikesHistory() {
+	public List<Coordinate> getStrikesHistory() {
 		return strikesHistory;
 	}
 
-	public void setStrikesHistory(List<Square> strikesHistory) {
+	public void setStrikesHistory(List<Coordinate> strikesHistory) {
 		this.strikesHistory = strikesHistory;
+	}
+
+	public List<Square> getHitStrikes() {
+		return hitStrikes;
+	}
+
+	public void setHitStrikes(List<Square> hitStrikes) {
+		this.hitStrikes = hitStrikes;
 	}
 
 }
