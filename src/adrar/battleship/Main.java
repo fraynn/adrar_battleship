@@ -1,18 +1,18 @@
 package adrar.battleship;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
 	public static void main(String[] args) {
 		PlayerStrikesHistory playerStrikesHistory = new PlayerStrikesHistory();
-		Square square = new Square('D', 3);
+		Square square = new Square();
+		square.setX('D');
+		square.setY(4);
 		System.out.println(square.getStatus());
-		List<Square> strikeHistory = new ArrayList<>();
-//		System.out.println(playerStrikesHistory.checkIfStrikeExists(square));
+		System.out.println(playerStrikesHistory.checkIfStrikeExists(square));
 		playerStrikesHistory.addStrike(square);
-//		System.out.println(plastrikeHistory);
+		System.out.println(playerStrikesHistory.getStrikesHistory());
+		playerStrikesHistory.addStrike(square);
+		System.out.println(playerStrikesHistory.getStrikesHistory());
 
 		// System.out.println(playerStrikesHistory.checkIfStrikeExists(square));
 		// playerStrikesHistory.addStrike(square);

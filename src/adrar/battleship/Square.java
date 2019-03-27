@@ -19,6 +19,11 @@ public class Square {
 		return y;
 	}
 
+	@Override
+	public String toString() {
+		return "Square [y=" + y + ", x=" + x + ", status=" + status + "]";
+	}
+
 	public void setY(int y) {
 		this.y = y;
 	}
