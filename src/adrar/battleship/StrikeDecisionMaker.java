@@ -3,7 +3,11 @@ package adrar.battleship;
 import adrar.battleship.interfaces.StrikeDecisionMakerInterface;
 
 public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
-	private PlayerStrikesHistory strikeHistory = new PlayerStrikesHistory();
+	private PlayerStrikesHistory strikeHistory;
+
+	public StrikeDecisionMaker() {
+		strikeHistory = new PlayerStrikesHistory();
+	}
 
 	@Override
 	public Square targetSquare() {
@@ -11,4 +15,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return null;
 	}
 
+	private Square targetRandomSquare() {
+
+	}
 }
