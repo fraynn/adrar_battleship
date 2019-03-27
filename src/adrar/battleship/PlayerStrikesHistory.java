@@ -23,11 +23,14 @@ public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
 
 	@Override
 	public boolean checkIfStrikeExists(Square square) {
-		if (square.getX()) {
-			return false;
-		} else {
-			return true;
+		boolean exist = false;
+		for (Square currentSquare : strikesHistory) {
+			if (currentSquare.equals(square)) {
+				exist = true;
+				return exist;
+			}
 		}
+		return exist;
 	}
 
 	// Get + Set

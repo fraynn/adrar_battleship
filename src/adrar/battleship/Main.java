@@ -4,9 +4,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		PlayerStrikesHistory playerStrikesHistory = new PlayerStrikesHistory();
-		Square square = new Square();
-		square.setX('D');
-		square.setY(4);
+		Square square = new Square('D', 5);
 		System.out.println(square.getStatus());
 		System.out.println(playerStrikesHistory.checkIfStrikeExists(square));
 		playerStrikesHistory.addStrike(square);
