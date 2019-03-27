@@ -1,12 +1,21 @@
 package adrar.battleship;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import adrar.battleship.interfaces.StrikeDecisionMakerInterface;
 
 public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
-	private PlayerStrikesHistory strikeHistory;
+	public static final int GRID_SIZE = 10;
+
+	private PlayerStrikesHistory missedStrikesList;
+	private PlayerStrikesHistory hitSquaresList;
+	private List<Square> possibleTargetsList;
 
 	public StrikeDecisionMaker() {
-		strikeHistory = new PlayerStrikesHistory();
+		missedStrikesList = new PlayerStrikesHistory();
+		hitSquaresList = new PlayerStrikesHistory();
+		possibleTargetsList = new ArrayList<>();
 	}
 
 	@Override
@@ -16,6 +25,10 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	}
 
 	private Square targetRandomSquare() {
+
+	}
+
+	private void populatePossibleTargetList() {
 
 	}
 }

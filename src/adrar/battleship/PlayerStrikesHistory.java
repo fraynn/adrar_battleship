@@ -14,20 +14,23 @@ public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
 
 	@Override
 	public void addStrike(Square square) {
-		if (checkIfStrikeExists(square) == true) {
+		if (checkIfStrikeExists(square) == false) {
 			strikesHistory.add(square);
+		} else {
+			System.out.println("you already targeted that square");
 		}
 	}
 
 	@Override
 	public boolean checkIfStrikeExists(Square square) {
-		if (square.getStatus() != SquareStatus.valueOf(null)) {
-			return true;
-
-		} else {
-			System.out.println("you already targeted that square");
-			return false;
+		boolean exist = false;
+		for (Square currentSquare : strikesHistory) {
+			if (currentSquare.equals(square)) {
+				exist = true;
+				return exist;
+			}
 		}
+		return exist;
 	}
 
 	// Get + Set
