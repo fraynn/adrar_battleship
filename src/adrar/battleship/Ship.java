@@ -17,19 +17,43 @@ public class Ship implements ShipInterface {
 	// Methods
 
 	@Override
-	public SquareStatus isHit(Square square) {
-		// TODO Auto-generated method stub
-		return null;
+	public SquareStatus updateHitSquareStatus(Square square) {
+		if (shipCoordinates.contains(square)) {
+			updateHitSquare(square);
+			return tellStatus(SquareStatus.Hit);
+		} else {
+			return tellStatus(SquareStatus.Miss);
+		}
 	}
 
-	@Override
-	public boolean updateShipStatus() {
-		// TODO Auto-generated method stub
-		return false;
+	private void updateShipSunk() {
+		boolean sunk = true;
+		for (Square square : shipCoordinates) {
+			if (SquareStatus.Miss.equals(square.getStatus()) || square.getStatus() == null) {
+				sunk = false;
+			}
+		}
+		setSunk(sunk);
+	}
+
+	private SquareStatus tellStatus(SquareStatus status) {
+		if (!sunk) {
+			updateShipSunk();
+		}
+
+		if (sunk) {
+			return SquareStatus.Sunk;
+		} else {
+			return status;
+		}
+	}
+
+	private void updateHitSquare(Square square) {
+		int squareIndex = shipCoordinates.indexOf(square);
+		shipCoordinates.get(squareIndex).setStatus(SquareStatus.Hit);
 	}
 
 	// Get + Set
-
 	public List<Square> getShipCoordinates() {
 		return shipCoordinates;
 	}

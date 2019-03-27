@@ -14,7 +14,6 @@ public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
 
 	@Override
 	public void addStrike(Square square) {
-		// TODO Auto-generated method stub
 		if (checkIfStrikeExists(square) == false) {
 			strikesHistory.add(square);
 		} else {
@@ -24,7 +23,6 @@ public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
 
 	@Override
 	public boolean checkIfStrikeExists(Square square) {
-		// TODO Auto-generated method stub
 		if (square.getX()) {
 			return false;
 		} else {
