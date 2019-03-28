@@ -14,6 +14,11 @@ public class Coordinate {
 		return y == ((Coordinate) obj).getY() && x == ((Coordinate) obj).getX();
 	}
 
+	@Override
+	public String toString() {
+		return "Coordinate [y=" + y + ", x=" + x + "]";
+	}
+
 	// Get + Set
 
 	public char getY() {

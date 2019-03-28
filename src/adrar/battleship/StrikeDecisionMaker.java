@@ -12,12 +12,14 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	private List<Square> availableTargetsList;
 	private Coordinate currentStrikeAttempt;
 	private Direction currentlyTargetedShipDirection;
+	private List<Integer> shipsSunkSizes;
 
 	public StrikeDecisionMaker() {
 		strikesHistory = new PlayerStrikesHistory();
 		availableTargetsList = new ArrayList<>();
 		currentStrikeAttempt = new Coordinate('B', 2);
 		currentlyTargetedShipDirection = null;
+		shipsSunkSizes = new ArrayList<>();
 	}
 
 	// Methods
@@ -31,7 +33,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	}
 
 	// TODO :
-//	- clear hit list if sunk
+//	- test remove remainingSquares
 //	- strike strategy if 1 square hit
 //	- strike strategy when ship direction is known
 //	- general strategy otherwise
@@ -47,11 +49,29 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return null;
 	}
 
-	public ArrayList<Square> targetAdjacentVerticalSquare() {
+	public ArrayList<Square> findAdjacentTargets() {
+		ArrayList<Square> potentialTargets = new ArrayList<>();
+		potentialTargets.addAll(findAdjacentHorizontalTargets());
+		potentialTargets.addAll(findAdjacentVerticalTargets());
+		return potentialTargets;
+	}
+
+	public ArrayList<Square> findAdjacentHorizontalTargets() {
 		ArrayList<Square> potentialTargets = new ArrayList<>();
 		for (Square square : getHitSquaresList()) {
 			potentialTargets.add(new Square(square.getLeftSquare().getY(), square.getLeftSquare().getX()));
 			potentialTargets.add(new Square(square.getRightSquare().getY(), square.getRightSquare().getX()));
+		}
+		potentialTargets.removeIf(square -> !availableTargetsList.contains(square));
+
+		return potentialTargets;
+	}
+
+	public ArrayList<Square> findAdjacentVerticalTargets() {
+		ArrayList<Square> potentialTargets = new ArrayList<>();
+		for (Square square : getHitSquaresList()) {
+			potentialTargets.add(new Square(square.getTopSquare().getY(), square.getTopSquare().getX()));
+			potentialTargets.add(new Square(square.getBottomSquare().getY(), square.getBottomSquare().getX()));
 		}
 		potentialTargets.removeIf(square -> !availableTargetsList.contains(square));
 
@@ -68,15 +88,25 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	}
 
 	public void updateListsBasedOnStrikeResult(SquareStatus result) {
+		strikesHistory.addStrikeToHistory(currentStrikeAttempt);
 		if (result.equals(SquareStatus.Miss)) {
-			strikesHistory.addStrikeToHistory(currentStrikeAttempt);
 			removeTargetFromAvailableTargets(currentStrikeAttempt);
-		} else if (result.equals(SquareStatus.Hit)) {
+		} else if (result.equals(SquareStatus.Hit) || result.equals(SquareStatus.Sunk)) {
 			strikesHistory.addStrikeToHitList(new Square(currentStrikeAttempt.getY(), currentStrikeAttempt.getX()));
 			removeTargetAndDiagonalSquaresFromAvailableTargets(currentStrikeAttempt);
-		} else if (result.equals(SquareStatus.Sunk)) {
-			removeTargetAndDiagonalSquaresFromAvailableTargets(currentStrikeAttempt);
+			determineTargetedShipDirection();
 		}
+		if (result.equals(SquareStatus.Sunk)) {
+			removeRemainingAdjacentTargets();
+			clearHitListAndLogSunkShipSize();
+			setCurrentlyTargetedShipDirection(null);
+		}
+	}
+
+	private void clearHitListAndLogSunkShipSize() {
+		int shipSize = getHitSquaresList().size();
+		strikesHistory.clearHitList();
+		shipsSunkSizes.add(shipSize);
 	}
 
 	private void removeTargetAndDiagonalSquaresFromAvailableTargets(Coordinate target) {
@@ -86,6 +116,18 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 
 	private void removeTargetFromAvailableTargets(Coordinate target) {
 		availableTargetsList.removeIf(square -> square.getCoordinates().equals(target));
+	}
+
+	private void removeRemainingAdjacentTargets() {
+		List<Square> remainingTargets = new ArrayList<>();
+		if (currentlyTargetedShipDirection == null) {
+			return;
+		} else if (currentlyTargetedShipDirection.equals(Direction.Vertical)) {
+			remainingTargets.addAll(findAdjacentVerticalTargets());
+		} else {
+			remainingTargets.addAll(findAdjacentHorizontalTargets());
+		}
+		availableTargetsList.removeAll(remainingTargets);
 	}
 
 	private void determineTargetedShipDirection() {
@@ -117,6 +159,18 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 
 	public List<Square> getAvailableTargetsList() {
 		return availableTargetsList;
+	}
+
+	public List<Integer> getShipsSunkSizes() {
+		return shipsSunkSizes;
+	}
+
+	public Direction getCurrentlyTargetedShipDirection() {
+		return currentlyTargetedShipDirection;
+	}
+
+	public void setCurrentlyTargetedShipDirection(Direction currentlyTargetedShipDirection) {
+		this.currentlyTargetedShipDirection = currentlyTargetedShipDirection;
 	}
 
 }
