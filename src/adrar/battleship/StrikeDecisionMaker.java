@@ -33,7 +33,6 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	}
 
 	// TODO :
-//	- test remove remainingSquares
 //	- strike strategy if 1 square hit
 //	- strike strategy when ship direction is known
 //	- general strategy otherwise
