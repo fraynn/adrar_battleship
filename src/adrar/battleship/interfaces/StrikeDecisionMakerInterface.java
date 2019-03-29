@@ -1,7 +1,7 @@
 package adrar.battleship.interfaces;
 
-import adrar.battleship.Square;
+import adrar.battleship.Coordinate;
 
 public interface StrikeDecisionMakerInterface {
-	public Square targetSquare();
+	public Coordinate targetSquare();
 }

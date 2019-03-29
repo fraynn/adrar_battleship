@@ -2,11 +2,13 @@ package adrar.battleship;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import adrar.battleship.interfaces.StrikeDecisionMakerInterface;
 
 public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	public static final int GRID_SIZE = 10;
+	private static final Random RANDOM = new Random();
 
 	private PlayerStrikesHistory strikesHistory;
 	private List<Square> availableTargetsList;
@@ -24,7 +26,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 
 	// Methods
 	@Override
-	public Square targetSquare() {
+	public Coordinate targetSquare() {
 		if (getHitSquaresList().size() > 0) {
 			return targetAroundHitSquare();
 		} else {
@@ -39,13 +41,21 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 //	- update currentStrikeAttempt
 //	- remove strikes all around the hit ship from availableTargets
 
-	private Square targetRandomSquare() {
+	private Coordinate targetRandomSquare() {
 		return null;
 	}
 
-	private Square targetAroundHitSquare() {
+	private Coordinate targetAroundHitSquare() {
+		if (currentlyTargetedShipDirection == null) {
+			return randomTarget(findAdjacentTargets());
+		}
 
 		return null;
+	}
+
+	private Coordinate randomTarget(List<Square> squareList) {
+		int randomIndex = RANDOM.nextInt(squareList.size());
+		return squareList.get(randomIndex).getCoordinates();
 	}
 
 	public ArrayList<Square> findAdjacentTargets() {
