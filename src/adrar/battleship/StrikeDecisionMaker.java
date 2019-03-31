@@ -20,7 +20,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		strikesHistory = new PlayerStrikesHistory();
 		availableTargetsList = new ArrayList<>();
 		currentStrikeAttempt = new Coordinate('B', 2);
-		currentlyTargetedShipDirection = null;
+		currentlyTargetedShipDirection = Direction.Unknown;
 		shipsSunkSizes = new ArrayList<>();
 	}
 
@@ -35,22 +35,35 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	}
 
 	// TODO :
-//	- strike strategy if 1 square hit
-//	- strike strategy when ship direction is known
 //	- general strategy otherwise
 //	- update currentStrikeAttempt
-//	- remove strikes all around the hit ship from availableTargets
+//	- privatise methods set to public for testing
+//	- comment code and reason for methods existence
+//	- clean unneeded setters & getters
+//	- improve readability of if/else logic blocks
+//	- check the need for a status on squares
 
 	private Coordinate targetRandomSquare() {
 		return null;
 	}
 
 	private Coordinate targetAroundHitSquare() {
-		if (currentlyTargetedShipDirection == null) {
-			return randomTarget(findAdjacentTargets());
+		switch (currentlyTargetedShipDirection) {
+
+		case Vertical:
+			currentStrikeAttempt = randomTarget(findAdjacentVerticalTargets());
+			break;
+
+		case Horizontal:
+			currentStrikeAttempt = randomTarget(findAdjacentHorizontalTargets());
+			break;
+
+		case Unknown:
+			currentStrikeAttempt = randomTarget(findAdjacentTargets());
+			break;
 		}
 
-		return null;
+		return currentStrikeAttempt;
 	}
 
 	private Coordinate randomTarget(List<Square> squareList) {
@@ -60,8 +73,10 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 
 	public ArrayList<Square> findAdjacentTargets() {
 		ArrayList<Square> potentialTargets = new ArrayList<>();
+
 		potentialTargets.addAll(findAdjacentHorizontalTargets());
 		potentialTargets.addAll(findAdjacentVerticalTargets());
+
 		return potentialTargets;
 	}
 
@@ -108,7 +123,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		if (result.equals(SquareStatus.Sunk)) {
 			removeRemainingAdjacentTargets();
 			clearHitListAndLogSunkShipSize();
-			setCurrentlyTargetedShipDirection(null);
+			setCurrentlyTargetedShipDirection(Direction.Unknown);
 		}
 	}
 
@@ -129,7 +144,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 
 	private void removeRemainingAdjacentTargets() {
 		List<Square> remainingTargets = new ArrayList<>();
-		if (currentlyTargetedShipDirection == null) {
+		if (currentlyTargetedShipDirection.equals(Direction.Unknown)) {
 			return;
 		} else if (currentlyTargetedShipDirection.equals(Direction.Vertical)) {
 			remainingTargets.addAll(findAdjacentVerticalTargets());

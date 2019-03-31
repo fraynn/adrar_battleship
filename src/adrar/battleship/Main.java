@@ -8,8 +8,8 @@ public class Main {
 //		System.out.println(ia.getAvailableTargetsList().size());
 //
 		ia.updateListsBasedOnStrikeResult(SquareStatus.Hit);
-		ia.setCurrentStrikeAttempt(new Coordinate('B', 3));
-		ia.updateListsBasedOnStrikeResult(SquareStatus.Hit);
+//		ia.setCurrentStrikeAttempt(new Coordinate('B', 3));
+//		ia.updateListsBasedOnStrikeResult(SquareStatus.Sunk);
 //		System.out.println(ia.targetAdjacentVerticalSquare());
 //		ia.setCurrentStrikeAttempt(new Coordinate('B', 4));
 //		ia.updateListsBasedOnStrikeResult(SquareStatus.Sunk);
@@ -18,6 +18,8 @@ public class Main {
 		System.out.println(ia.getShipsSunkSizes());
 		System.out.println(ia.getAvailableTargetsList());
 		System.out.println(ia.getCurrentlyTargetedShipDirection());
+		System.out.println(ia.findAdjacentTargets());
+		System.out.println(ia.targetSquare());
 
 	}
 
