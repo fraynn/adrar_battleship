@@ -7,19 +7,25 @@ import adrar.battleship.interfaces.PlayerStrikesHistoryInterface;
 
 public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
 	private List<Coordinate> strikesHistory;
-	private List<Square> hitStrikes;
+	private List<Square> hitStrikesList;
+	private List<Square> missedStrikesList;
 
 	public PlayerStrikesHistory() {
 		strikesHistory = new ArrayList<>();
-		hitStrikes = new ArrayList<>();
+		hitStrikesList = new ArrayList<>();
+		missedStrikesList = new ArrayList<>();
 	}
 
 	public void addStrikeToHitList(Square square) {
-		hitStrikes.add(square);
+		hitStrikesList.add(square);
+	}
+
+	public void addStrikeToMissedList(Square square) {
+		missedStrikesList.add(square);
 	}
 
 	public void clearHitList() {
-		hitStrikes.clear();
+		hitStrikesList.clear();
 	}
 
 	@Override
@@ -52,12 +58,20 @@ public class PlayerStrikesHistory implements PlayerStrikesHistoryInterface {
 		this.strikesHistory = strikesHistory;
 	}
 
-	public List<Square> getHitStrikes() {
-		return hitStrikes;
+	public List<Square> getHitStrikesList() {
+		return hitStrikesList;
 	}
 
-	public void setHitStrikes(List<Square> hitStrikes) {
-		this.hitStrikes = hitStrikes;
+	public void setHitStrikesList(List<Square> hitStrikes) {
+		this.hitStrikesList = hitStrikes;
+	}
+
+	public List<Square> getMissedStrikesList() {
+		return missedStrikesList;
+	}
+
+	public void setMissedStrikesList(List<Square> missedStrikesList) {
+		this.missedStrikesList = missedStrikesList;
 	}
 
 }

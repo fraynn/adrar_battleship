@@ -1,5 +1,8 @@
 package adrar.battleship;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Square {
 	private Coordinate coordinates;
 	private SquareStatus status;
@@ -23,6 +26,23 @@ public class Square {
 	public boolean isDiagonalCoordinate(Coordinate coordinate) {
 		return coordinate.equals(topLeftSquare) || coordinate.equals(topRightSquare)
 				|| coordinate.equals(bottomLeftSquare) || coordinate.equals(bottomRightSquare);
+	}
+
+	public List<Square> getDiagonalSquaresList() {
+		List<Coordinate> diagonalCoordinates = new ArrayList<>();
+		List<Square> diagonalSquares = new ArrayList<>();
+
+		diagonalCoordinates.add(topLeftSquare);
+		diagonalCoordinates.add(topRightSquare);
+		diagonalCoordinates.add(bottomLeftSquare);
+		diagonalCoordinates.add(bottomRightSquare);
+
+		for (Coordinate coordinate : diagonalCoordinates) {
+			Square newSquare = new Square(coordinate.getY(), coordinate.getX());
+			diagonalSquares.add(newSquare);
+		}
+
+		return diagonalSquares;
 	}
 
 	@Override

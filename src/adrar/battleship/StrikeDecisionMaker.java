@@ -8,7 +8,7 @@ import adrar.battleship.interfaces.StrikeDecisionMakerInterface;
 
 public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	public static final int GRID_SIZE = 10;
-	private static final Random RANDOM = new Random();
+	private final Random RANDOM;
 
 	private PlayerStrikesHistory strikesHistory;
 	private List<Square> availableTargetsList;
@@ -17,34 +17,63 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	private List<Integer> shipsSunkSizes;
 
 	public StrikeDecisionMaker() {
+		RANDOM = new Random();
 		strikesHistory = new PlayerStrikesHistory();
 		availableTargetsList = new ArrayList<>();
-		currentStrikeAttempt = new Coordinate('B', 2);
+		currentStrikeAttempt = new Coordinate('C', 3);
 		currentlyTargetedShipDirection = Direction.Unknown;
 		shipsSunkSizes = new ArrayList<>();
+		populatePossibleTargetList();
 	}
+
+	// TODO :
+//	- privatise methods set to public for testing
+//	- comment code and reason for methods existence
+//	- clean unneeded setters & getters
+//	- improve readability of if/else logic blocks
 
 	// Methods
 	@Override
 	public Coordinate targetSquare() {
-		if (getHitSquaresList().size() > 0) {
+		boolean aShipHasBeenHit = getHitSquaresList().size() > 0;
+		if (aShipHasBeenHit) {
 			return targetAroundHitSquare();
 		} else {
 			return targetRandomSquare();
 		}
 	}
 
-	// TODO :
-//	- general strategy otherwise
-//	- update currentStrikeAttempt
-//	- privatise methods set to public for testing
-//	- comment code and reason for methods existence
-//	- clean unneeded setters & getters
-//	- improve readability of if/else logic blocks
-//	- check the need for a status on squares
+	@Override
+	public void updateListsBasedOnStrikeResult(SquareStatus result) {
+		Square targetedSquare = new Square(currentStrikeAttempt.getY(), currentStrikeAttempt.getX());
+
+		strikesHistory.addStrikeToHistory(currentStrikeAttempt);
+
+		if (result.equals(SquareStatus.Miss)) {
+			strikesHistory.addStrikeToMissedList(targetedSquare);
+			removeTargetFromAvailableTargets(currentStrikeAttempt);
+		} else if (result.equals(SquareStatus.Hit) || result.equals(SquareStatus.Sunk)) {
+			strikesHistory.addStrikeToHitList(targetedSquare);
+			removeTargetAndDiagonalSquaresFromAvailableTargets(currentStrikeAttempt);
+			determineTargetedShipDirection();
+		}
+		if (result.equals(SquareStatus.Sunk)) {
+			removeRemainingAdjacentTargets();
+			clearHitListAndLogSunkShipSize();
+			setCurrentlyTargetedShipDirection(Direction.Unknown);
+		}
+	}
 
 	private Coordinate targetRandomSquare() {
-		return null;
+		boolean firstStrikeAttempt = strikesHistory.getMissedStrikesList().size() == 0;
+		List<Square> bestPossibleTargetSquares = findDiagonalSquaresFromMissedTargets();
+
+		if (firstStrikeAttempt || bestPossibleTargetSquares.size() < 10) {
+			currentStrikeAttempt = randomTarget(availableTargetsList);
+		} else {
+			currentStrikeAttempt = randomTarget(bestPossibleTargetSquares);
+		}
+		return currentStrikeAttempt;
 	}
 
 	private Coordinate targetAroundHitSquare() {
@@ -71,8 +100,18 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return squareList.get(randomIndex).getCoordinates();
 	}
 
-	public ArrayList<Square> findAdjacentTargets() {
-		ArrayList<Square> potentialTargets = new ArrayList<>();
+	public List<Square> findDiagonalSquaresFromMissedTargets() {
+		List<Square> missedSquares = strikesHistory.getMissedStrikesList();
+		List<Square> diagonalFromMissedSquaresList = new ArrayList<>();
+		for (Square square : missedSquares) {
+			diagonalFromMissedSquaresList.addAll(square.getDiagonalSquaresList());
+		}
+		diagonalFromMissedSquaresList.retainAll(availableTargetsList);
+		return diagonalFromMissedSquaresList;
+	}
+
+	public List<Square> findAdjacentTargets() {
+		List<Square> potentialTargets = new ArrayList<>();
 
 		potentialTargets.addAll(findAdjacentHorizontalTargets());
 		potentialTargets.addAll(findAdjacentVerticalTargets());
@@ -80,8 +119,8 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return potentialTargets;
 	}
 
-	public ArrayList<Square> findAdjacentHorizontalTargets() {
-		ArrayList<Square> potentialTargets = new ArrayList<>();
+	public List<Square> findAdjacentHorizontalTargets() {
+		List<Square> potentialTargets = new ArrayList<>();
 		for (Square square : getHitSquaresList()) {
 			potentialTargets.add(new Square(square.getLeftSquare().getY(), square.getLeftSquare().getX()));
 			potentialTargets.add(new Square(square.getRightSquare().getY(), square.getRightSquare().getX()));
@@ -91,8 +130,8 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return potentialTargets;
 	}
 
-	public ArrayList<Square> findAdjacentVerticalTargets() {
-		ArrayList<Square> potentialTargets = new ArrayList<>();
+	public List<Square> findAdjacentVerticalTargets() {
+		List<Square> potentialTargets = new ArrayList<>();
 		for (Square square : getHitSquaresList()) {
 			potentialTargets.add(new Square(square.getTopSquare().getY(), square.getTopSquare().getX()));
 			potentialTargets.add(new Square(square.getBottomSquare().getY(), square.getBottomSquare().getX()));
@@ -102,28 +141,12 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return potentialTargets;
 	}
 
-	public void populatePossibleTargetList() {
+	private void populatePossibleTargetList() {
 		for (char i = 65; i < GRID_SIZE + 65; i++) {
 			for (int j = 1; j < GRID_SIZE + 1; j++) {
 				Square square = new Square(i, j);
 				availableTargetsList.add(square);
 			}
-		}
-	}
-
-	public void updateListsBasedOnStrikeResult(SquareStatus result) {
-		strikesHistory.addStrikeToHistory(currentStrikeAttempt);
-		if (result.equals(SquareStatus.Miss)) {
-			removeTargetFromAvailableTargets(currentStrikeAttempt);
-		} else if (result.equals(SquareStatus.Hit) || result.equals(SquareStatus.Sunk)) {
-			strikesHistory.addStrikeToHitList(new Square(currentStrikeAttempt.getY(), currentStrikeAttempt.getX()));
-			removeTargetAndDiagonalSquaresFromAvailableTargets(currentStrikeAttempt);
-			determineTargetedShipDirection();
-		}
-		if (result.equals(SquareStatus.Sunk)) {
-			removeRemainingAdjacentTargets();
-			clearHitListAndLogSunkShipSize();
-			setCurrentlyTargetedShipDirection(Direction.Unknown);
 		}
 	}
 
@@ -169,8 +192,12 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return strikesHistory.getStrikesHistory();
 	}
 
+	public List<Square> getMissedSquaresList() {
+		return strikesHistory.getMissedStrikesList();
+	}
+
 	public List<Square> getHitSquaresList() {
-		return strikesHistory.getHitStrikes();
+		return strikesHistory.getHitStrikesList();
 	}
 
 	public Coordinate getCurrentStrikeAttempt() {
