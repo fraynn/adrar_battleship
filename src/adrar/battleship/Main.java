@@ -10,8 +10,8 @@ public class Main {
 		for (int i = 0; i < 100; i++) {
 			scores.add(playGame());
 		}
-		scores.removeIf(score -> score >= 40);
-		System.out.println(scores.size());
+//		scores.removeIf(score -> score >= 40);
+		System.out.println(scores);
 	}
 
 	public static int playGame() {
@@ -89,7 +89,7 @@ public class Main {
 			enemyShipsList.removeIf(ship -> ship.isSunk());
 			ia.updateListsBasedOnStrikeResult(biggestResponse);
 
-//			System.out.println(targetCoordinate + biggestResponse.toString());
+			System.out.println(targetCoordinate + biggestResponse.toString());
 
 			shotsNumber++;
 		}

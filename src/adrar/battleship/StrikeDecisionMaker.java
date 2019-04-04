@@ -16,23 +16,23 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	private Direction currentlyTargetedShipDirection;
 	private List<Integer> shipsSunkSizes;
 
+	// Constructor
 	public StrikeDecisionMaker() {
 		RANDOM = new Random();
-		strikesHistory = new PlayerStrikesHistory();
-		availableTargetsList = new ArrayList<>();
-		currentStrikeAttempt = new Coordinate('C', 3);
 		currentlyTargetedShipDirection = Direction.Unknown;
+		strikesHistory = new PlayerStrikesHistory();
 		shipsSunkSizes = new ArrayList<>();
+		availableTargetsList = new ArrayList<>();
 		populatePossibleTargetList();
 	}
 
 	// TODO :
-//	- privatise methods set to public for testing
-//	- comment code and reason for methods existence
-//	- clean unneeded setters & getters
+//	- move methods to playerStrikeHistory that belong there
 //	- improve readability of if/else logic blocks
 
 	// Methods
+
+	// Two different targetting modes, depending on whether a ship was found or not
 	@Override
 	public Coordinate targetSquare() {
 		boolean aShipHasBeenHit = getHitSquaresList().size() > 0;
@@ -60,7 +60,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		if (result.equals(SquareStatus.Sunk)) {
 			removeRemainingAdjacentTargets();
 			clearHitListAndLogSunkShipSize();
-			setCurrentlyTargetedShipDirection(Direction.Unknown);
+			currentlyTargetedShipDirection = Direction.Unknown;
 		}
 	}
 
@@ -100,7 +100,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return squareList.get(randomIndex).getCoordinates();
 	}
 
-	public List<Square> findDiagonalSquaresFromMissedTargets() {
+	private List<Square> findDiagonalSquaresFromMissedTargets() {
 		List<Square> missedSquares = strikesHistory.getMissedStrikesList();
 		List<Square> diagonalFromMissedSquaresList = new ArrayList<>();
 		for (Square square : missedSquares) {
@@ -110,7 +110,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return diagonalFromMissedSquaresList;
 	}
 
-	public List<Square> findAdjacentTargets() {
+	private List<Square> findAdjacentTargets() {
 		List<Square> potentialTargets = new ArrayList<>();
 
 		potentialTargets.addAll(findAdjacentHorizontalTargets());
@@ -119,7 +119,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return potentialTargets;
 	}
 
-	public List<Square> findAdjacentHorizontalTargets() {
+	private List<Square> findAdjacentHorizontalTargets() {
 		List<Square> potentialTargets = new ArrayList<>();
 		for (Square square : getHitSquaresList()) {
 			potentialTargets.add(new Square(square.getLeftSquare().getY(), square.getLeftSquare().getX()));
@@ -130,7 +130,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return potentialTargets;
 	}
 
-	public List<Square> findAdjacentVerticalTargets() {
+	private List<Square> findAdjacentVerticalTargets() {
 		List<Square> potentialTargets = new ArrayList<>();
 		for (Square square : getHitSquaresList()) {
 			potentialTargets.add(new Square(square.getTopSquare().getY(), square.getTopSquare().getX()));
@@ -204,24 +204,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return currentStrikeAttempt;
 	}
 
-	public void setCurrentStrikeAttempt(Coordinate currentStrikeAttempt) {
-		this.currentStrikeAttempt = currentStrikeAttempt;
-	}
-
-	public List<Square> getAvailableTargetsList() {
-		return availableTargetsList;
-	}
-
-	public List<Integer> getShipsSunkSizes() {
-		return shipsSunkSizes;
-	}
-
 	public Direction getCurrentlyTargetedShipDirection() {
 		return currentlyTargetedShipDirection;
 	}
-
-	public void setCurrentlyTargetedShipDirection(Direction currentlyTargetedShipDirection) {
-		this.currentlyTargetedShipDirection = currentlyTargetedShipDirection;
-	}
-
 }
