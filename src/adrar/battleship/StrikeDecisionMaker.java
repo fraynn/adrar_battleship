@@ -14,6 +14,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	private List<Square> availableTargetsList;
 	private Coordinate currentStrikeAttempt;
 	private Direction currentlyTargetedShipDirection;
+//	Not used right now, see TODO
 	private List<Integer> shipsSunkSizes;
 
 	// Constructor
@@ -21,14 +22,15 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		RANDOM = new Random();
 		currentlyTargetedShipDirection = Direction.Unknown;
 		strikesHistory = new PlayerStrikesHistory();
-		shipsSunkSizes = new ArrayList<>();
 		availableTargetsList = new ArrayList<>();
-		populatePossibleTargetList();
+		populateAvailableTargetList();
+		// Not used right now, see TODO
+		shipsSunkSizes = new ArrayList<>();
 	}
 
 	// TODO :
 //	- move methods to playerStrikeHistory that belong there
-//	- improve readability of if/else logic blocks
+//	- use shipsSunkSizes list to filter available targets list
 
 	// Methods
 
@@ -44,20 +46,20 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	}
 
 	@Override
-	public void updateListsBasedOnStrikeResult(SquareStatus result) {
+	public void updateListsBasedOnStrikeResult(SquareStatus strikeResult) {
 		Square targetedSquare = new Square(currentStrikeAttempt.getY(), currentStrikeAttempt.getX());
 
 		strikesHistory.addStrikeToHistory(currentStrikeAttempt);
 
-		if (result.equals(SquareStatus.Miss)) {
+		if (strikeResult.equals(SquareStatus.Miss)) {
 			strikesHistory.addStrikeToMissedList(targetedSquare);
 			removeTargetFromAvailableTargets(currentStrikeAttempt);
-		} else if (result.equals(SquareStatus.Hit) || result.equals(SquareStatus.Sunk)) {
+		} else if (strikeResult.equals(SquareStatus.Hit) || strikeResult.equals(SquareStatus.Sunk)) {
 			strikesHistory.addStrikeToHitList(targetedSquare);
 			removeTargetAndDiagonalSquaresFromAvailableTargets(currentStrikeAttempt);
 			determineTargetedShipDirection();
 		}
-		if (result.equals(SquareStatus.Sunk)) {
+		if (strikeResult.equals(SquareStatus.Sunk)) {
 			removeRemainingAdjacentTargets();
 			clearHitListAndLogSunkShipSize();
 			currentlyTargetedShipDirection = Direction.Unknown;
@@ -66,6 +68,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 
 	private Coordinate targetRandomSquare() {
 		boolean firstStrikeAttempt = strikesHistory.getMissedStrikesList().size() == 0;
+		// Avoid aiming at two adjacent coordinates, as the minimum ship size is 2
 		List<Square> bestPossibleTargetSquares = findDiagonalSquaresFromMissedTargets();
 
 		if (firstStrikeAttempt || bestPossibleTargetSquares.size() < 10) {
@@ -141,7 +144,7 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 		return potentialTargets;
 	}
 
-	private void populatePossibleTargetList() {
+	private void populateAvailableTargetList() {
 		for (char i = 65; i < GRID_SIZE + 65; i++) {
 			for (int j = 1; j < GRID_SIZE + 1; j++) {
 				Square square = new Square(i, j);
@@ -151,9 +154,10 @@ public class StrikeDecisionMaker implements StrikeDecisionMakerInterface {
 	}
 
 	private void clearHitListAndLogSunkShipSize() {
+//		shipSize not currently used, see TODO
 		int shipSize = getHitSquaresList().size();
-		strikesHistory.clearHitList();
 		shipsSunkSizes.add(shipSize);
+		strikesHistory.clearHitList();
 	}
 
 	private void removeTargetAndDiagonalSquaresFromAvailableTargets(Coordinate target) {
